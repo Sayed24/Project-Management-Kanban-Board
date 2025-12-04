@@ -1,1 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartTask — Kanban Board</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Professional Trello-style Kanban board built with HTML, CSS & JavaScript. Works with localStorage. Great portfolio project." />
+</head>
+<body>
+  <div id="app">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="top-left">
+        <button id="menuToggle" class="icon-btn" aria-label="Toggle menu">☰</button>
+        <h1 class="brand">SmartTask</h1>
+      </div>
 
+      <div class="top-center">
+        <input id="searchInput" type="search" placeholder="Search cards, lists or labels..." />
+      </div>
+
+      <div class="top-right">
+        <select id="boardSelect" aria-label="Choose board"></select>
+        <button id="newBoardBtn" class="primary">+ New Board</button>
+        <div class="dropdown">
+          <button id="exportBtn" class="icon-btn" title="Export board data">⬇</button>
+          <button id="importBtn" class="icon-btn" title="Import board data">⬆</button>
+          <input type="file" id="importFile" accept="application/json" style="display:none">
+        </div>
+      </div>
+    </header>
+
+    <!-- Layout -->
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <section class="profile">
+          <div class="avatar">SR</div>
+          <div>
+            <div class="name">Sayedrahim Sadat</div>
+            <div class="role">Front-end Developer</div>
+          </div>
+        </section>
+
+        <nav class="nav">
+          <button class="nav-item" id="openBoardList">Boards</button>
+          <button class="nav-item" id="openTemplates">Templates</button>
+          <button class="nav-item" id="openSettings">Settings</button>
+        </nav>
+
+        <section class="boards-list">
+          <h3>Boards</h3>
+          <ul id="boardsListUI"></ul>
+        </section>
+
+        <footer class="sidebar-footer">
+          <small>LocalStorage • No server required</small>
+        </footer>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main">
+        <section class="board-toolbar">
+          <div>
+            <h2 id="boardTitle">Board</h2>
+            <div class="meta" id="boardMeta">0 lists • 0 cards</div>
+          </div>
+          <div class="toolbar-actions">
+            <label class="label-filter">
+              Filter:
+              <select id="labelFilter">
+                <option value="">All labels</option>
+              </select>
+            </label>
+            <button id="addListBtn" class="primary">+ Add List</button>
+          </div>
+        </section>
+
+        <section class="board-area" id="boardArea">
+          <!-- Lists will be injected here -->
+        </section>
+
+        <section class="empty-state" id="emptyState" hidden>
+          <h3>No lists yet — create your first list</h3>
+          <button id="emptyAddList" class="primary">+ Add List</button>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Card modal -->
+  <div id="cardModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+      <header class="modal-header">
+        <h3 id="cardModalTitle">Card</h3>
+        <button id="closeModal" class="icon-btn">✕</button>
+      </header>
+
+      <form id="cardForm" class="modal-body">
+        <label>Title
+          <input type="text" id="cardTitle" required />
+        </label>
+
+        <label>Description
+          <textarea id="cardDesc" rows="4"></textarea>
+        </label>
+
+        <div class="field-row">
+          <label>Due date
+            <input type="date" id="cardDue" />
+          </label>
+
+          <label>Labels
+            <div id="labelChips" class="label-chips"></div>
+            <button id="addLabelBtn" type="button" class="small">+ Create label</button>
+          </label>
+        </div>
+
+        <label>Checklist
+          <div id="checklist"></div>
+          <div class="add-check">
+            <input id="newCheckText" placeholder="Add checklist item..." />
+            <button id="addCheckBtn" type="button" class="small">Add</button>
+          </div>
+        </label>
+
+        <label>Comments
+          <div id="comments"></div>
+          <div class="add-comment">
+            <input id="newCommentText" placeholder="Write a comment..." />
+            <button id="addCommentBtn" type="button" class="small">Add</button>
+          </div>
+        </label>
+
+        <div class="modal-actions">
+          <button id="saveCardBtn" class="primary">Save</button>
+          <button id="deleteCardBtn" type="button" class="danger">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <template id="listTemplate">
+    <div class="list">
+      <div class="list-head">
+        <h4 class="list-title"></h4>
+        <div class="list-actions">
+          <button class="icon-btn add-card" title="Add card">＋</button>
+          <button class="icon-btn list-menu" title="List menu">⋯</button>
+        </div>
+      </div>
+      <div class="cards" data-droptarget="true"></div>
+      <div class="list-footer">
+        <button class="small add-card-footer">+ Add card</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="cardTemplate">
+    <div class="card" draggable="true">
+      <div class="card-labels"></div>
+      <div class="card-title"></div>
+      <div class="card-meta"></div>
+    </div>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
